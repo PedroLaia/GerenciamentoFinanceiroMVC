@@ -12,6 +12,5 @@ namespace GerenciamentoFinanceiroMVC.Controllers
             return View();
         }
 
-
     }
 }
