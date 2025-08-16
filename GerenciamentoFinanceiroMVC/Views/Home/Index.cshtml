@@ -1,9 +1,98 @@
-﻿@{
-    ViewData["Title"] = "Tela Principal";
-}
+﻿@model IEnumerable<Financeiro>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to the Index</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <button class="btn btn-success">Clique Aqui!</button>
+<div class="row mt-5">
+
+	<div class="text-center">
+		<a class="btn btn-success"> Adicionar - Transação</a>
+		<a class="btn btn-warning"> Adicionar - Categoria</a>
+		<a class="btn btn-info"> Análise de Valores</a>
+	</div>
+
+
+	<div class="col-md-2">
+
+		<form asp-action="Filtrar" asp-controller="Home" method="post">
+			<div class="mb-3">
+				<label class="form-label">Categoria:</label>
+				<select name="filtro"
+						class="form-select"
+						asp-items="@(new SelectList(ViewBag.Categorias, "CategoriaId", "NomeCategoria", ViewBag.Filtros.CategoriaId))">
+					<option value="todos">Todos</option>
+
+				</select>
+			</div>
+
+			<div class="mb-3">
+				<label class="form-label">Tipo da Transação:</label>
+				<select name="filtro"
+						class="form-select"
+						asp-items="@(new SelectList(ViewBag.Transacoes, "TransacaoId", "NomeTransacao", ViewBag.Filtros.TransacaoId))">
+					<option value="todos">Todos</option>
+
+				</select>
+			</div>
+
+			<div class="mb-3">
+				<label class="form-label">Data:</label>
+				<select name="filtro"
+						class="form-select"
+						asp-items="@(new SelectList(ViewBag.DataOperacao, "Key", "Value", ViewBag.Filtros.DataOperacao))">
+					<option value="todos">Todos</option>
+
+				</select>
+			</div>
+
+			<button type="submit" class="btn btn-success w-100 mb2">Aplicar Filtro</button>
+			<a asp-action="Index" asp-route-id="" class="btn btn-info w-100">Limpar Filtro</a>
+
+		</form>
+	</div>
+
+	<div class="col-md-10">
+
+		<table class="table table-light table-bordered mt-2">
+			<thead>
+				<tr>
+					<th>Descrição</th>
+					<th>Categoria</th>
+					<th>Data</th>
+					<th>Transação</th>
+					<th>Valor</th>
+					<th class="w-25"></th>
+				</tr>
+			</thead>
+
+			<tbody>
+				
+				@foreach (Financeiro f in Model)
+				{
+					<tr>
+						<td>@f.Descricao</td>
+						<td>@f.Categoria.NomeCategoria</td>
+						<td>@f.DataOperacao.ToString("dd/MM/yyyy")</td>
+
+						@if (f.Transacao.NomeTransacao == "Ganho")
+						{
+							<td style="color:lawngreen">@f.Transacao.NomeTransacao</td>
+						}
+						@if (f.Transacao.NomeTransacao == "Gasto")
+						{
+							<td style="color:darkred">>@f.Transacao.NomeTransacao</td>
+						}
+
+						<td>R$ @f.Valor.ToString("F")</td>
+
+						<td>
+							<a classs="btn btn-danger">Excluir Registro</a>
+						</td>
+
+					</tr>
+				}
+
+
+			</tbody>
+		</table>
+	</div>
+
+
 </div>
